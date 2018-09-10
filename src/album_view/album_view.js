@@ -1,12 +1,28 @@
 import React, { Component } from 'react';
 import Album from '../album';
+import Song from '../song';
 import './album_view.css';
 
 const ALBUM_1 = {
   artist: 'Mac Miller',
   title: 'Swimming',
   art:
-    'https://images.genius.com/0327e4a856f14b2430e6e1a9333b1f1f.1000x1000x1.jpg'
+    'https://images.genius.com/0327e4a856f14b2430e6e1a9333b1f1f.1000x1000x1.jpg',
+  songs: [
+    'Come Back to Earth',
+    'Hurt Feelings',
+    "What's the Use?",
+    'Perfecto',
+    'Self Care',
+    'Wings',
+    'Ladders',
+    'Small Worlds',
+    'Conversation Pt. 1',
+    'Dunno',
+    'Jet Fuel',
+    '2009',
+    'So It Goes'
+  ]
 };
 
 const ALBUM_2 = {
@@ -47,9 +63,21 @@ const ALBUMS = [
 class AlbumView extends Component {
   render() {
     const id = this.props.match.params.id;
+    const albumInfo = ALBUMS[id];
+    const songs = albumInfo.songs.map((song, i) => {
+      return (
+        <li key={song}>
+          <Song song={song} />
+        </li>
+      );
+    });
+
     return (
       <div className="album-view">
-        <Album albumInfo={ALBUMS[id]} />
+        <div className="album-view-wrap">
+          <Album albumInfo={albumInfo} />
+          <ul>{songs}</ul>
+        </div>
       </div>
     );
   }

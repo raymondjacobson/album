@@ -1,0 +1,14 @@
+.song {
+  padding: 10px 20px;
+  border: 1px solid #333;
+  width: 80%;
+  margin: 0 auto;
+  height: 50px;
+}
+
+.song p {
+  font-size: 0.6em;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 4px auto;
+}
