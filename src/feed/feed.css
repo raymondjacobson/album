@@ -1,0 +1,12 @@
+.feed {
+  width: 80%;
+  margin: 0 auto;
+}
+.flexContainer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.flexItem {
+  margin-bottom: 50px;
+}

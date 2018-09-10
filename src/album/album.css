@@ -1,0 +1,27 @@
+.album {
+  padding: 20px;
+  width: 300px;
+  height: 300px;
+  text-align: center;
+  border: 1px solid #333;
+}
+.album img {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.album h1 {
+  font-size: 1em;
+  text-transform: uppercase;
+  font-weight: 100;
+  letter-spacing: 2px;
+  word-spacing: 5px;
+  margin: 4px auto;
+}
+
+.album h2 {
+  font-size: 0.6em;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin: 4px auto;
+}

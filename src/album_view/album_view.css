@@ -1,0 +1,11 @@
+.album-view {
+}
+
+.album-view .album {
+  padding: 20px;
+  width: 500px;
+  height: 500px;
+  text-align: center;
+  border: 1px solid #333;
+  margin: 0 auto;
+}

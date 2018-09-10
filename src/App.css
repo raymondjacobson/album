@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Noto+Serif+KR:200,300,400,500,600,700,900');
+
+body {
+  background-color: #fdfdfd;
+  font-family: 'Noto Serif KR', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

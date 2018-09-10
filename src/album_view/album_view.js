@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Album from '../album';
-import './feed.css';
+import './album_view.css';
 
 const ALBUM_1 = {
   artist: 'Mac Miller',
@@ -45,36 +44,15 @@ const ALBUMS = [
   ALBUM_4
 ];
 
-class Feed extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      albums: Array(20).fill(null)
-    };
-  }
-
-  albumList() {
-    let list = [];
-    for (let i = 0; i < ALBUMS.length; ++i) {
-      const link = '/album/' + i;
-      list.push(
-        <Link to={link}>
-          <div className="flexItem">
-            <Album albumInfo={ALBUMS[i]} />
-          </div>
-        </Link>
-      );
-    }
-    return list;
-  }
-
+class AlbumView extends Component {
   render() {
+    const id = this.props.match.params.id;
     return (
-      <div className="feed">
-        <div className="flexContainer">{this.albumList()}</div>
+      <div className="album-view">
+        <Album albumInfo={ALBUMS[id]} />
       </div>
     );
   }
 }
 
-export default Feed;
+export default AlbumView;
