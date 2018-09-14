@@ -50,6 +50,7 @@ class Song extends Component {
   _chartRef = null;
   // Testing otherl listeners works.
   _counter = 0;
+  _intervals = [];
 
   secondsToMinutes(time) {
     return (
@@ -71,7 +72,10 @@ class Song extends Component {
     }, 500);
   }
   componentWillUnmount() {
-    clearInterval(this.interval);
+    this.isCancelled = true;
+    this._intervals.forEach(interval => {
+      clearInterval(interval);
+    });
     clearInterval(this.updateCharts);
   }
 
@@ -88,11 +92,21 @@ class Song extends Component {
 
   dataTest(i) {
     Store.dispatch(
-      updateCursor(this.props.albumIndex, this.props.songIndex, i, 50)
+      updateCursor(
+        this.props.albumIndex,
+        this.props.songIndex,
+        i,
+        Math.random() * 10
+      )
     );
     setTimeout(() => {
       Store.dispatch(
-        updateCursor(this.props.albumIndex, this.props.songIndex, i, -50)
+        updateCursor(
+          this.props.albumIndex,
+          this.props.songIndex,
+          i,
+          -Math.random() * 10
+        )
       );
     }, 1000);
   }
@@ -105,18 +119,19 @@ class Song extends Component {
       data: getData(Math.floor(durationSeconds))
     });
 
+    this._counters = {};
+    this._intervals = [];
     // TODO: rm. TESTING THAT MULTIPLE LISTENERS DOES WORK.
-    this._counter1 = Math.floor(Math.random() * durationSeconds);
-    this._counter2 = Math.floor(Math.random() * durationSeconds);
-    this._counter3 = Math.floor(Math.random() * durationSeconds);
-    this.interval = setInterval(() => {
-      this._counter1++;
-      this._counter2++;
-      this._counter3++;
-      this.dataTest(this._counter1);
-      this.dataTest(this._counter2);
-      this.dataTest(this._counter3);
-    }, 1000);
+    const OTHER_VIEWERS = 0;
+    for (let i = 0; i < OTHER_VIEWERS; ++i) {
+      this._counters[i] = Math.floor(Math.random() * durationSeconds);
+      this._intervals.push(
+        setInterval(() => {
+          this._counters[i]++;
+          this.dataTest(this._counters[i]);
+        }, 1000)
+      );
+    }
   }
 
   updateState() {
@@ -132,11 +147,13 @@ class Song extends Component {
     });
     datasetsCopy[0].data = dataCopy;
 
-    this.setState({
-      data: Object.assign({}, this.state.data, {
-        datasets: datasetsCopy
-      })
-    });
+    if (!this.isCancelled) {
+      this.setState({
+        data: Object.assign({}, this.state.data, {
+          datasets: datasetsCopy
+        })
+      });
+    }
   }
 
   onListen() {
@@ -220,7 +237,9 @@ class Song extends Component {
                 {
                   display: false,
                   ticks: {
-                    display: false
+                    display: false,
+                    min: 0,
+                    max: 101
                   }
                 }
               ]
