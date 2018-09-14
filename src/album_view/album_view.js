@@ -37,6 +37,8 @@ class AlbumView extends Component {
       let songListItem =
         this.state.songPlayingIndex === i && this.state.isPlaying ? (
           <Song
+            albumIndex={this.props.match.params.id}
+            songIndex={i}
             song={song.name}
             songLocation={
               albumInfo.location + albumInfo.artist + ' - ' + song.name + '.mp3'
@@ -49,6 +51,8 @@ class AlbumView extends Component {
           />
         ) : (
           <Song
+            albumIndex={this.props.match.params.id}
+            songIndex={i}
             song={song.name}
             songLocation={
               albumInfo.location + albumInfo.artist + ' - ' + song.name + '.mp3'
@@ -65,6 +69,7 @@ class AlbumView extends Component {
             <Link to={'/'}>&larr;</Link>
           </div>
           <Album
+            albumIndex={this.props.match.params.id}
             albumInfo={albumInfo}
             showPlayButton={true}
             startAlbum={() => this.startAlbum()}

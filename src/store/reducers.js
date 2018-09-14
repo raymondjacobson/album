@@ -5,9 +5,13 @@ function albums(state = {}, action) {
   switch (action.type) {
     case UPDATE_CURSOR:
       let newState = Object.assign({}, state);
-      newState.albums[action.albumIndex][action.songIndex].positions.push(
-        action.position
-      );
+      let positions =
+        newState[action.albumIndex].songs[action.songIndex].positions;
+      if (action.position in positions && positions[action.position] > 0) {
+        positions[action.position] += action.amount;
+      } else {
+        positions[action.position] = action.amount;
+      }
       return newState;
     default:
       return state;

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './song.css';
 import { Line } from 'react-chartjs-2';
 import ReactAudioPlayer from 'react-audio-player';
+import Store from '../store';
+import { updateCursor } from '../store/actions';
 
 function getData(durationSeconds) {
   const labels = [...Array(durationSeconds).keys()];
@@ -41,9 +43,13 @@ class Song extends Component {
       duration: null,
       data: getData(0)
     };
+    // TODO: rm.
+    // this.dataTest = this.dataTest.bind(this);
   }
   _audioTag = null;
   _chartRef = null;
+  // Testing otherl listeners works.
+  _counter = 0;
 
   secondsToMinutes(time) {
     return (
@@ -59,6 +65,16 @@ class Song extends Component {
     }
   }
 
+  componentDidMount() {
+    this.updateCharts = setInterval(() => {
+      this.updateState();
+    }, 500);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+    clearInterval(this.updateCharts);
+  }
+
   play() {
     this._audioTag.audioEl.play();
   }
@@ -67,8 +83,18 @@ class Song extends Component {
   }
 
   onEnded() {
-    console.log('over');
     this.props.songEndedCallback();
+  }
+
+  dataTest(i) {
+    Store.dispatch(
+      updateCursor(this.props.albumIndex, this.props.songIndex, i, 50)
+    );
+    setTimeout(() => {
+      Store.dispatch(
+        updateCursor(this.props.albumIndex, this.props.songIndex, i, -50)
+      );
+    }, 1000);
   }
 
   onLoadedMetadata() {
@@ -78,23 +104,73 @@ class Song extends Component {
       duration: duration,
       data: getData(Math.floor(durationSeconds))
     });
+
+    // TODO: rm. TESTING THAT MULTIPLE LISTENERS DOES WORK.
+    this._counter1 = Math.floor(Math.random() * durationSeconds);
+    this._counter2 = Math.floor(Math.random() * durationSeconds);
+    this._counter3 = Math.floor(Math.random() * durationSeconds);
+    this.interval = setInterval(() => {
+      this._counter1++;
+      this._counter2++;
+      this._counter3++;
+      this.dataTest(this._counter1);
+      this.dataTest(this._counter2);
+      this.dataTest(this._counter3);
+    }, 1000);
   }
 
-  onListen() {
-    const currentTime = this._audioTag.audioEl.currentTime;
+  updateState() {
+    const albums = Store.getState().albums;
+    const positionsFromStore =
+      albums[this.props.albumIndex].songs[this.props.songIndex].positions;
 
     const datasetsCopy = this.state.data.datasets.slice(0);
     const dataCopy = datasetsCopy[0].data.slice(0);
-    dataCopy[Math.floor(currentTime)]++;
-    dataCopy[Math.floor(currentTime) - 1]--;
+
+    Object.entries(positionsFromStore).forEach(([index, weight]) => {
+      dataCopy[index] = weight;
+    });
     datasetsCopy[0].data = dataCopy;
 
     this.setState({
-      currentTime: this.secondsToMinutes(currentTime),
       data: Object.assign({}, this.state.data, {
         datasets: datasetsCopy
       })
     });
+  }
+
+  onListen() {
+    const currentTime = this._audioTag.audioEl.currentTime;
+    const currentPosition = Math.floor(currentTime);
+
+    Store.dispatch(
+      updateCursor(
+        this.props.albumIndex,
+        this.props.songIndex,
+        currentPosition,
+        100
+      )
+    );
+
+    setTimeout(
+      function() {
+        Store.dispatch(
+          updateCursor(
+            this.props.albumIndex,
+            this.props.songIndex,
+            currentPosition,
+            -100
+          )
+        );
+      }.bind(this),
+      1000
+    );
+
+    this.setState({
+      currentTime: this.secondsToMinutes(currentTime)
+    });
+
+    // this.upda/teState();
   }
 
   render() {
