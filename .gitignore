@@ -6,6 +6,9 @@
 # testing
 /coverage
 
+# music
+/public/music
+
 # production
 /build
 
