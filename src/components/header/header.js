@@ -6,7 +6,7 @@ class Header extends Component {
   render() {
     return (
       <header className="header">
-        <Link to="/">
+        {/* <Link to="/">
           <h1>
             Goomba
             <img
@@ -15,7 +15,7 @@ class Header extends Component {
             />
           </h1>
         </Link>
-        <Link to="/about">About</Link>
+        <Link to="/about">About</Link> */}
       </header>
     );
   }

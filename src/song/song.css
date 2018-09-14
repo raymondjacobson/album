@@ -4,6 +4,11 @@
   width: 80%;
   margin: 0 auto;
   height: 50px;
+  position: relative;
+}
+
+.song.selected {
+  border-color: #f68888;
 }
 
 .song p {
@@ -11,4 +16,18 @@
   font-weight: 900;
   text-transform: uppercase;
   margin: 4px auto;
+  position: absolute;
+  z-index: 1;
+}
+
+.song p.song-start {
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+}
+
+.song p.song-end {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
 }

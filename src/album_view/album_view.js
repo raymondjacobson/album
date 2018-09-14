@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Album from '../album';
 import Song from '../song';
 import './album_view.css';
@@ -61,21 +62,35 @@ const ALBUMS = [
 ];
 
 class AlbumView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      // TODO: Set this to the current song playing.
+      songPlayingIndex: null
+    };
+  }
+
   render() {
     const id = this.props.match.params.id;
     const albumInfo = ALBUMS[id];
     const songs = albumInfo.songs.map((song, i) => {
-      return (
-        <li key={song}>
+      let songListItem =
+        this.state.songPlayingIndex === i ? (
+          <Song song={song} selected={true} />
+        ) : (
           <Song song={song} />
-        </li>
-      );
+        );
+      return <li key={song}>{songListItem}</li>;
     });
 
     return (
       <div className="album-view">
         <div className="album-view-wrap">
-          <Album albumInfo={albumInfo} />
+          <div className="back-button">
+            <Link to={'/'}>&larr;</Link>
+          </div>
+          <Album albumInfo={albumInfo} showPlayButton={true} />
           <ul>{songs}</ul>
         </div>
       </div>

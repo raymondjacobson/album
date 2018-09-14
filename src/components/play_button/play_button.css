@@ -1,0 +1,20 @@
+.play-button {
+  position: absolute;
+  bottom: 10%;
+  left: 10%;
+  z-index: 1;
+}
+.play-button button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3em;
+  color: #333;
+}
+.play-button button:focus {
+  outline: none;
+}
+
+.play-button button:hover {
+  color: #f68888;
+}
