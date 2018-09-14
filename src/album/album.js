@@ -3,10 +3,6 @@ import './album.css';
 import PlayButton from '../components/play_button';
 
 class Album extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   startAlbum() {
     this.props.startAlbum();
   }
@@ -23,7 +19,7 @@ class Album extends Component {
     return (
       <div className="album">
         {playButton}
-        <img src={albumInfo.art} />
+        <img alt={'Album art'} src={albumInfo.art} />
         <h1>{albumInfo.title}</h1>
         <h2>{albumInfo.artist}</h2>
       </div>

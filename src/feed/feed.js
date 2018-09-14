@@ -5,10 +5,6 @@ import './feed.css';
 import Store from '../store';
 
 class Feed extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   albumList() {
     const albums = Store.getState().albums;
     let list = [];
