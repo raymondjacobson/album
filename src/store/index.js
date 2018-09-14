@@ -2,11 +2,12 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
-import rootReducer from '../modules';
+import libraryApp from './reducers';
+import ALBUMS from '../data.js';
 
 export const history = createHistory();
 
-const initialState = {};
+const initialState = { albums: ALBUMS };
 const enhancers = [];
 const middleware = [thunk, routerMiddleware(history)];
 
@@ -23,10 +24,10 @@ const composedEnhancers = compose(
   ...enhancers
 );
 
-const store = createStore(
-  connectRouter(history)(rootReducer),
+const Store = createStore(
+  connectRouter(history)(libraryApp),
   initialState,
   composedEnhancers
 );
 
-export default store;
+export default Store;

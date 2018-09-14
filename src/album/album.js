@@ -3,13 +3,21 @@ import './album.css';
 import PlayButton from '../components/play_button';
 
 class Album extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  startAlbum() {
+    this.props.startAlbum();
+  }
+
   render() {
     const albumInfo = this.props.albumInfo;
     const showPlayButton = this.props.showPlayButton;
 
     let playButton = null;
     if (showPlayButton) {
-      playButton = <PlayButton />;
+      playButton = <PlayButton startPlaying={() => this.startAlbum()} />;
     }
 
     return (

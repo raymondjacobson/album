@@ -31,3 +31,8 @@
   bottom: 0;
   right: 20px;
 }
+
+.song audio {
+  float: right;
+  display: none;
+}

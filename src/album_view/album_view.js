@@ -3,85 +3,59 @@ import { Link } from 'react-router-dom';
 import Album from '../album';
 import Song from '../song';
 import './album_view.css';
-
-const ALBUM_1 = {
-  artist: 'Mac Miller',
-  title: 'Swimming',
-  art:
-    'https://images.genius.com/0327e4a856f14b2430e6e1a9333b1f1f.1000x1000x1.jpg',
-  songs: [
-    'Come Back to Earth',
-    'Hurt Feelings',
-    "What's the Use?",
-    'Perfecto',
-    'Self Care',
-    'Wings',
-    'Ladders',
-    'Small Worlds',
-    'Conversation Pt. 1',
-    'Dunno',
-    'Jet Fuel',
-    '2009',
-    'So It Goes'
-  ]
-};
-
-const ALBUM_2 = {
-  artist: 'Bon Iver',
-  title: 'Bon Iver',
-  art: 'http://images.genius.com/745f803cb77ad87d7fdbac572148ee13.900x900x1.jpg'
-};
-
-const ALBUM_3 = {
-  artist: 'Moses Sumney',
-  title: 'Aromanticism',
-  art:
-    'http://images.genius.com/47cd8dcf0d11cba1482c757abe1a069d.1000x1000x1.jpg'
-};
-
-const ALBUM_4 = {
-  artist: 'Radiohead',
-  title: 'In Rainbows',
-  art:
-    'https://images.genius.com/525c7ac8ba19f54cb8a545c285649b27.1000x1000x1.jpg'
-};
-
-const ALBUMS = [
-  ALBUM_1,
-  ALBUM_2,
-  ALBUM_3,
-  ALBUM_4,
-  ALBUM_1,
-  ALBUM_2,
-  ALBUM_3,
-  ALBUM_4,
-  ALBUM_1,
-  ALBUM_2,
-  ALBUM_3,
-  ALBUM_4
-];
+import Store from '../store';
 
 class AlbumView extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // TODO: Set this to the current song playing.
-      songPlayingIndex: null
+      songPlayingIndex: null,
+      isPlaying: false
     };
   }
 
+  startAlbum() {
+    this.setState({
+      songPlayingIndex: 0,
+      isPlaying: !this.state.isPlaying
+    });
+  }
+
+  nextSong() {
+    this.setState({
+      songPlayingIndex: this.state.songPlayingIndex + 1
+    });
+  }
+
   render() {
+    const albums = Store.getState().albums;
+
     const id = this.props.match.params.id;
-    const albumInfo = ALBUMS[id];
+    const albumInfo = albums[id];
     const songs = albumInfo.songs.map((song, i) => {
       let songListItem =
-        this.state.songPlayingIndex === i ? (
-          <Song song={song} selected={true} />
+        this.state.songPlayingIndex === i && this.state.isPlaying ? (
+          <Song
+            song={song.name}
+            songLocation={
+              albumInfo.location + albumInfo.artist + ' - ' + song.name + '.mp3'
+            }
+            selected={true}
+            isPlaying={true}
+            songEndedCallback={() => {
+              this.nextSong();
+            }}
+          />
         ) : (
-          <Song song={song} />
+          <Song
+            song={song.name}
+            songLocation={
+              albumInfo.location + albumInfo.artist + ' - ' + song.name + '.mp3'
+            }
+          />
         );
-      return <li key={song}>{songListItem}</li>;
+      return <li key={song.name}>{songListItem}</li>;
     });
 
     return (
@@ -90,7 +64,11 @@ class AlbumView extends Component {
           <div className="back-button">
             <Link to={'/'}>&larr;</Link>
           </div>
-          <Album albumInfo={albumInfo} showPlayButton={true} />
+          <Album
+            albumInfo={albumInfo}
+            showPlayButton={true}
+            startAlbum={() => this.startAlbum()}
+          />
           <ul>{songs}</ul>
         </div>
       </div>

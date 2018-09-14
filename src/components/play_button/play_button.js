@@ -15,6 +15,7 @@ class PlayButton extends Component {
     this.setState({
       isPlaying: !this.state.isPlaying
     });
+    this.props.startPlaying();
   }
 
   render() {
